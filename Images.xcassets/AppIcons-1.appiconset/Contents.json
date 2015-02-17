@@ -1,0 +1,128 @@
+{
+  "images": [
+    {
+      "filename": "OrkinApp_29.png",
+      "size": "29x29",
+      "scale": "1x",
+      "idiom": "iphone"
+    },
+    {
+      "filename": "OrkinApp_58.png",
+      "size": "29x29",
+      "scale": "2x",
+      "idiom": "iphone"
+    },
+    {
+      "filename": "OrkinApp_87.png",
+      "size": "29x29",
+      "scale": "3x",
+      "idiom": "iphone"
+    },
+    {
+      "filename": "OrkinApp_80.png",
+      "size": "40x40",
+      "scale": "2x",
+      "idiom": "iphone"
+    },
+    {
+      "filename": "OrkinApp_120.png",
+      "size": "40x40",
+      "scale": "3x",
+      "idiom": "iphone"
+    },
+    {
+      "filename": "OrkinApp_57.png",
+      "size": "57x57",
+      "scale": "1x",
+      "idiom": "iphone"
+    },
+    {
+      "filename": "OrkinApp_114.png",
+      "size": "57x57",
+      "scale": "2x",
+      "idiom": "iphone"
+    },
+    {
+      "filename": "OrkinApp_120.png",
+      "size": "60x60",
+      "scale": "2x",
+      "idiom": "iphone"
+    },
+    {
+      "filename": "OrkinApp_180.png",
+      "size": "60x60",
+      "scale": "3x",
+      "idiom": "iphone"
+    },
+    {
+      "filename": "OrkinApp_29.png",
+      "size": "29x29",
+      "scale": "1x",
+      "idiom": "ipad"
+    },
+    {
+      "filename": "OrkinApp_58.png",
+      "size": "29x29",
+      "scale": "2x",
+      "idiom": "ipad"
+    },
+    {
+      "filename": "OrkinApp_40.png",
+      "size": "40x40",
+      "scale": "1x",
+      "idiom": "ipad"
+    },
+    {
+      "filename": "OrkinApp_80.png",
+      "size": "40x40",
+      "scale": "2x",
+      "idiom": "ipad"
+    },
+    {
+      "filename": "OrkinApp_50.png",
+      "size": "50x50",
+      "scale": "1x",
+      "idiom": "ipad"
+    },
+    {
+      "filename": "OrkinApp_100.png",
+      "size": "50x50",
+      "scale": "2x",
+      "idiom": "ipad"
+    },
+    {
+      "filename": "OrkinApp_72.png",
+      "size": "72x72",
+      "scale": "1x",
+      "idiom": "ipad"
+    },
+    {
+      "filename": "OrkinApp_144.png",
+      "size": "72x72",
+      "scale": "2x",
+      "idiom": "ipad"
+    },
+    {
+      "filename": "OrkinApp_76.png",
+      "size": "76x76",
+      "scale": "1x",
+      "idiom": "ipad"
+    },
+    {
+      "filename": "OrkinApp_152.png",
+      "size": "76x76",
+      "scale": "2x",
+      "idiom": "ipad"
+    },
+    {
+      "filename": "OrkinApp_120.png",
+      "size": "120x120",
+      "scale": "1x",
+      "idiom": "car"
+    }
+  ],
+  "info": {
+    "version": 1,
+    "author": "xcode"
+  }
+}
