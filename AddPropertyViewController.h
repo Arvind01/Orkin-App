@@ -36,8 +36,8 @@
 
 @property (nonatomic,strong) NSMutableArray *fetchNameArray;
 
-
-@property (nonatomic,strong) PropertyDetailsObject *showProperty;
+@property (nonatomic,strong) NSString *updateProperty,*updateProperty1;
+@property (nonatomic,strong) PropertyDetailsObject *showProperty,*showProperty1;
 @property (nonatomic, strong) AbstractActionSheetPicker *actionSheetPicker;
 @property (nonatomic) Reachability *reachability;
 //@property (nonatomic, strong) NSArray *stateNameArray;

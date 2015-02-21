@@ -46,13 +46,15 @@
 }
 
 - (IBAction)addPropertyButton:(id)sender {
-    [defaults setInteger:1 forKey:checkSettings];
+    
     [self performSegueWithIdentifier:@"toAddPropertySegue" sender:self];
     
 
 }
 
 - (IBAction)editPropertyButton:(id)sender {
+    
+
     [self performSegueWithIdentifier:@"toPropertyReel" sender:self];
 }
 

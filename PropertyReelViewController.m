@@ -14,7 +14,7 @@
 {
     NSMutableArray *propertyArray;
     NSInteger rowIndex;
-    
+    NSUserDefaults *defaults;
 }
 @end
 
@@ -27,7 +27,7 @@
     self.dataBase = [[DatabaseAdapter alloc]init];
     propertyArray =[[NSMutableArray alloc]init];
     
-    
+    defaults = [NSUserDefaults standardUserDefaults];
     [self.dataBase copyDatabaseIfNeeded];
     
     propertyArray= [self.dataBase fetchPropertyDetails];
@@ -87,9 +87,11 @@
    
     if([segue.identifier isEqualToString:@"goToDetails"])
     {
+       // [defaults setInteger:1 forKey:checkSettings];
         AddPropertyViewController *view = (AddPropertyViewController *)segue.destinationViewController;
-       
-        view.showProperty = [propertyArray objectAtIndex:rowIndex];
+        view.showProperty1 = [[PropertyDetailsObject alloc]init];
+        view.showProperty1 = [propertyArray objectAtIndex:rowIndex];
+        view.updateProperty1 = @"1";
         
         //        view.newEntry = true;
         //        view.navigatedFromPreferences = false;

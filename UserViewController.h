@@ -11,6 +11,7 @@
 #import "UserInfoObject.h"
 #import "AddPropertyViewController.h"
 #import "AppDelegate.h"
+#import "MyPropertyViewController.h"
 @interface UserViewController : UIViewController<UITextFieldDelegate,UIAlertViewDelegate,UIScrollViewDelegate,UITextFieldDelegate>{
          UITextField *activeField;
 

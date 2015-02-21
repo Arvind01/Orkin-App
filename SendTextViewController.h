@@ -7,8 +7,11 @@
 //
 
 #import <UIKit/UIKit.h>
+#import <MessageUI/MessageUI.h>
+#import "DatabaseAdapter.h"
 
-@interface SendTextViewController : UIViewController<UITextFieldDelegate, UITextViewDelegate, UIScrollViewDelegate>
+
+@interface SendTextViewController : UIViewController<UITextFieldDelegate, UITextViewDelegate, UIScrollViewDelegate,MFMessageComposeViewControllerDelegate>
 
 {
 
@@ -25,6 +28,12 @@ UITextView *activeField1;
 @property (strong, nonatomic) IBOutlet UIScrollView *scrollview;
 
 - (IBAction)backAction:(id)sender;
+- (IBAction)sendbutton:(id)sender;
 
+@property (weak, nonatomic) IBOutlet UISegmentedControl *pestSegmented;
+
+- (IBAction)pestSegmentAction:(id)sender;
+
+@property (nonatomic, strong) DatabaseAdapter *dataBase;
 
 @end

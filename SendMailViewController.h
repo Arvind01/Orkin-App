@@ -7,13 +7,27 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "Utils.h"
+#import "SKPSMTPMessage.h"
+#import "Reachability.h"
+#import "SVProgressHUD.h"
+#import "UserInfoObject.h"
+#import "PropertyDetailsObject.h"
+#import "DatabaseAdapter.h"
+#import "MyPropertyViewController.h"
 
-@interface SendMailViewController : UIViewController<UITextViewDelegate,UITextFieldDelegate,UIScrollViewDelegate>
+@interface SendMailViewController : UIViewController<UITextViewDelegate,UITextFieldDelegate,UIScrollViewDelegate,SKPSMTPMessageDelegate>
 
 {
+    BOOL pestControl,termiteControl1;
     UITextField *activeField;
 UITextView *activeField1;
 }
+@property (nonatomic) Reachability *reachability;
+@property (strong,nonatomic) SKPSMTPMessage *mail1;
+@property (nonatomic, strong) DatabaseAdapter *dataBase;
+
+
 
 @property (weak, nonatomic) IBOutlet UIButton *pestControlButton;
 
@@ -31,6 +45,12 @@ UITextView *activeField1;
 @property (nonatomic, strong)  UITapGestureRecognizer *tap;
 
 - (IBAction)cancelButton:(id)sender;
+
+- (IBAction)pestControlAction:(id)sender;
+- (IBAction)termiteControlAction:(id)sender;
+
+
+
 
 
 @end

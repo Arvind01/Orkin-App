@@ -10,8 +10,11 @@
 #import "DatabaseAdapter.h"
 #import "PropertyDetailsObject.h"
 #import "AddPropertyViewController.h"
-
+@protocol senddataProtocol <NSObject>
+-(void)sendDataToParent:(PropertyDetailsObject *)property;
+@end
 @interface PropertyReelViewController : UIViewController<UITableViewDelegate, UITableViewDataSource>
+@property(nonatomic,assign)id delegate;
 @property (weak, nonatomic) IBOutlet UITableView *propertytableview;
 @property (nonatomic, strong) DatabaseAdapter *dataBase;
 

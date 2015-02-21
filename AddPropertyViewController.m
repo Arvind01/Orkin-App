@@ -18,7 +18,8 @@
     NSMutableArray *fetchdata;
     NSString *zip;
     NSMutableArray *propertyArray;
-    
+    int propertyId;
+    BOOL Success;
 }
 @end
 
@@ -30,6 +31,7 @@
     self.dataBase = [[DatabaseAdapter alloc]init];
     self.homeButton.hidden = YES;
     self.backButton.hidden = YES;
+     self.cancelButton.hidden = YES;
   //  self.isDefault.hidden = YES;
    // self.defaultLabel.hidden = YES;
     residentialChecked = YES;
@@ -74,19 +76,29 @@
     self.addressTwo.delegate = self;
     self.state.delegate = self;
     self.city.delegate = self;
-    
+   
     [self.dataBase copyDatabaseIfNeeded];
-    if ([defaults integerForKey:checkSettings]==0) {
-        propertyArray= [self.dataBase fetchPropertyDetails];
-        if ([propertyArray count]>0) {
-            showProperty = [propertyArray objectAtIndex:0];
+     self.updateProperty = self.updateProperty1;
+    if([self.updateProperty isEqualToString:@"1"]){
+//        propertyArray= [self.dataBase fetchPropertyDetails];
+//        if ([propertyArray count]>0) {
+        self.showProperty = self.showProperty1;
+       
+            self.cancelButton.hidden=NO;
+          //  showProperty = [propertyArray objectAtIndex:0];
             self.nickName.text = showProperty.nickName;
             self.addressOne.text = showProperty.addressOne;
             self.addressTwo.text = showProperty.addressTwo;
             self.city.text = showProperty.city;
             self.state.text = showProperty.state;
             self.postalCode.text = showProperty.postalCode;
-        }
+        propertyId = [showProperty.Id intValue];
+            
+        //}
+    }
+    
+    else{
+        self.cancelButton.hidden = NO;
     }
     
     
@@ -94,8 +106,16 @@
     
     
 }
-
-
+/*-(void)sendDataToParent:(PropertyDetailsObject *)property{
+    
+    self.nickName.text = property.nickName;
+    self.addressOne.text = property.addressOne;
+    self.addressTwo.text = property.addressTwo;
+    self.city.text = property.city;
+    self.state.text = property.state;
+    self.postalCode.text = property.postalCode;
+}
+*/
 
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
@@ -343,23 +363,30 @@
         
         else{
             [self fetchData];
-            
-            [self.dataBase copyDatabaseIfNeeded];
-            insert = [self.dataBase insertPropertyDetails:property];
-//            for (int i=0; i<[self.fetchNameArray count]; i++) {
-//                insert1 = [self.dataBase insertBranchDetails:[self.fetchNameArray objectAtIndex:i]];
-//            }
-            
-            if (insert > 0) {
+            if (Success) {
+                if ([self.updateProperty isEqualToString:@"1"]) {
+                    property.Id = [NSString stringWithFormat:@"%d",propertyId] ;
+                    [self.dataBase copyDatabaseIfNeeded];
+                    insert = [self.dataBase updatePropertyDetails:property];
+                }
+                else{
+                    [self.dataBase copyDatabaseIfNeeded];
+                    insert = [self.dataBase insertPropertyDetails:property];
+                }
+                //            for (int i=0; i<[self.fetchNameArray count]; i++) {
+                //                insert1 = [self.dataBase insertBranchDetails:[self.fetchNameArray objectAtIndex:i]];
+                //            }
                 
-                [self performSegueWithIdentifier:@"toHomeSegue" sender:self];
-            }
-            else{
-                UIAlertView* alert = [[UIAlertView alloc] initWithTitle:@"Failed to insert data" message:@"Please, try again" delegate:nil cancelButtonTitle:@"Ok" otherButtonTitles:nil];[alert show];
-            }
-            
+                if (insert > 0) {
+                    
+                    [self performSegueWithIdentifier:@"toHomeSegue" sender:self];
+                }
+                else{
+                    UIAlertView* alert = [[UIAlertView alloc] initWithTitle:@"Failed to insert data" message:@"Please, try again" delegate:nil cancelButtonTitle:@"Ok" otherButtonTitles:nil];[alert show];
+                }
 
-            
+            }
+                  
         }
 
             }
@@ -399,7 +426,8 @@
             
              _dataObject.Fax = [D objectForKey:@"Fax"];
             
-             _dataObject.Phone = [D objectForKey:@"Phone"];
+            NSString *finalStr= [[[D objectForKey:@"Phone"] stringByReplacingOccurrencesOfString:@"(" withString:@""] stringByReplacingOccurrencesOfString:@")" withString:@""];
+            _dataObject.Phone = finalStr;
             
              _dataObject.Name = [D objectForKey:@"Name"];
             
@@ -419,10 +447,11 @@
              
             insert1 = [self.dataBase insertBranchDetails:_dataObject];
              [_fetchNameArray addObject:_dataObject];
+            
         
         }
         
-        
+        Success=YES;
     }
      
                                      failure:^(AFHTTPRequestOperation *operation, NSError *error) {
@@ -593,5 +622,6 @@
     
 }
 - (IBAction)cancelAction:(id)sender {
+    [self dismissViewControllerAnimated:YES completion:nil];
 }
 @end

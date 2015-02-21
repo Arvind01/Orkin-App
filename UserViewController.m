@@ -160,7 +160,10 @@
         //        view.newEntry = true;
         //        view.navigatedFromPreferences = false;
     }
-
+    else if ([segue.identifier isEqualToString:@"toMyPropertyView"]){
+        MyPropertyViewController *view = (MyPropertyViewController *)segue.destinationViewController;
+        
+    }
     
     
 }
@@ -187,7 +190,14 @@
         }
         
         if (insert > 0) {
-            [self performSegueWithIdentifier:@"toPropertyView" sender:self];
+            if ([userData count] == 0) {
+                [self performSegueWithIdentifier:@"toPropertyView" sender:self];
+            }
+            
+            else{
+                [self performSegueWithIdentifier:@"toMyPropertyView" sender:self];
+            }
+            
         }
         else{
             UIAlertView* alert = [[UIAlertView alloc] initWithTitle:@"Failed to insert data" message:@"Please, try again" delegate:nil cancelButtonTitle:@"Ok" otherButtonTitles:nil];[alert show];

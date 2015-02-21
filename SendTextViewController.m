@@ -7,13 +7,23 @@
 //
 
 #import "SendTextViewController.h"
+#import "SVProgressHUD.h"
+#import "SKPSMTPMessage.h"
+#import "DatabaseAdapter.h"
+#import "branchdata2object.h"
 
-@interface SendTextViewController ()
+
+@interface SendTextViewController (){
+    NSMutableArray *propertyData;
+}
 
 @end
 
 @implementation SendTextViewController
-
+{
+    NSMutableArray *branchData2details;
+    
+}
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
@@ -27,13 +37,36 @@
     
     self.textfield2.delegate = self;
     self.textview.delegate = self;
+    UIToolbar* numberToolbar = [[UIToolbar alloc]initWithFrame:CGRectMake(0, 0, 320, 50)];
+    numberToolbar.barStyle = UIBarStyleDefault;
+    numberToolbar.items = [NSArray arrayWithObjects:[[UIBarButtonItem alloc]initWithTitle:@"Done" style:UIBarButtonItemStyleDone target:self action:@selector(doneWithNumberPad)],
+                           nil];
+    [numberToolbar sizeToFit];
+    self.textfeild1.inputAccessoryView = numberToolbar;
+    
+    
+    self.dataBase = [[DatabaseAdapter alloc]init];
+    branchData2details=[[NSMutableArray alloc]init];
+    [self.dataBase copyDatabaseIfNeeded];
+    
+    branchData2details= [self.dataBase fetchPhonenumber];
     
 
-}
 
+}
+-(void)doneWithNumberPad{
+    //NSString *numberFromTheKeyboard = self.phoneField.text;
+    [self.textfeild1 resignFirstResponder];
+}
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
+}
+
+- (BOOL)textViewShouldBeginEditing:(UITextView *)textView
+{ self.textview.text = @"";
+    
+    return YES;
 }
 -(BOOL)textFieldShouldReturn:(UITextField *)textField
 {
@@ -157,6 +190,29 @@
 }
 
 
+- (void)messageComposeViewController:(MFMessageComposeViewController *)controller didFinishWithResult:(MessageComposeResult) result
+{
+    switch (result) {
+        case MessageComposeResultCancelled:
+            break;
+            
+        case MessageComposeResultFailed:
+        {
+            UIAlertView *warningAlert = [[UIAlertView alloc] initWithTitle:@"Error" message:@"Oups, error while sendind SMS!" delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
+            [warningAlert show];
+            break;
+        }
+            
+        case MessageComposeResultSent:
+            
+            break;
+            
+        default:
+            break;
+    }
+    
+    [self dismissViewControllerAnimated:YES completion:nil];
+}
 
 /*
 #pragma mark - Navigation
@@ -168,8 +224,81 @@
 }
 */
 
+-(BOOL)checkValidation{
+    if (self.textfeild1.text.length <= 0)
+    {
+        // errorLabel.TextColor = UIColor.Red;
+        
+        UIAlertView* alert = [[UIAlertView alloc] initWithTitle:@"" message:@"Please enter your cell phone number." delegate:nil cancelButtonTitle:@"Ok" otherButtonTitles:nil];[alert show];
+        return false;
+    }
+    else if (self.textview.text.length <= 0)
+    {
+        //errorLabel.TextColor = UIColor.Red;
+        
+        UIAlertView* alert = [[UIAlertView alloc] initWithTitle:@"" message:@"Please enter message." delegate:nil cancelButtonTitle:@"Ok" otherButtonTitles:nil];[alert show];
+        
+        return false;
+    }
+    else{
+        return true;
+    }
+
+}
+
 - (IBAction)backAction:(id)sender {
     
     [self dismissViewControllerAnimated:YES completion:nil];
+}
+
+- (IBAction)sendbutton:(id)sender {
+    
+//    if(![MFMessageComposeViewController canSendText]) {
+//        UIAlertView * alert = [[UIAlertView alloc] initWithTitle:@"Error" message:@"Your device cannot send text messages" delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
+//        [alert show];
+//        return;
+//    }
+    if ([self checkValidation]) {
+        BranchData2Object *branchData = [[BranchData2Object alloc]init];
+        branchData = [branchData2details objectAtIndex:0];
+        UserInfoObject *userData = [[UserInfoObject alloc]init];
+        PropertyDetailsObject *propertyData1 = [[PropertyDetailsObject alloc]init];
+        [self.dataBase copyDatabaseIfNeeded];
+        userData = [self.dataBase getUserData];
+        propertyData = [self.dataBase fetchPropertyDetails];
+        propertyData1 = [propertyData lastObject];
+        NSString *inquiryType;
+        if ([self.pestSegmented selectedSegmentIndex]==0) {
+            inquiryType = @"Pest Control";
+        }
+        else{
+            inquiryType = @"Termite Control";
+        }
+        
+        //set receipients
+        NSArray *recipients = [NSArray arrayWithObjects:branchData.PhoneNo, nil];
+        //NSArray *recipients = [NSArray arrayWithObjects:@"7259241664", nil];
+        
+        
+        //set message text
+        NSString * message = [NSString stringWithFormat:@"Subject:USE A PHONE TO TEXT THIS USER AT %@  InquiryType : %@                               Message:IMPORTANT! THIS IS A TEXT MESSAGE - %@                                              Text Message Sent From Orkin Customer : %@ %@ User Email : %@ User Address : %@ %@,%@,%@",self.textfeild1.text,inquiryType,self.textview.text,userData.firstName,userData.lastName,userData.emailId,propertyData1.addressOne,propertyData1.addressTwo,propertyData1.state,propertyData1.postalCode];
+        
+        
+        
+        MFMessageComposeViewController *messageController = [[MFMessageComposeViewController alloc] init];
+        messageController.messageComposeDelegate = self;
+        [messageController setRecipients:recipients];
+        [messageController setBody:message];
+        
+        // Present message view controller on screen
+        [self presentViewController:messageController animated:YES completion:nil];
+    }
+   
+    
+    
+    
+}
+- (IBAction)pestSegmentAction:(id)sender {
+   
 }
 @end

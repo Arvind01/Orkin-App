@@ -44,7 +44,39 @@
 	}
 }
 
+-(UserInfoObject *)getUserData{
+    sqlite3 *database;
+   // NSMutableArray *Templates=[[NSMutableArray alloc]init];
+    // Init the animals Array
+     UserInfoObject *item=[[UserInfoObject alloc]init];
+    // Open the database from the users filessytem
+    if(sqlite3_open([[DatabaseAdapter getDBPath] UTF8String], &database) == SQLITE_OK) {
+        
+        NSString *stmt=[NSString stringWithFormat:@"select * from UserData"];
+        
+        const char *sqlStatement = [stmt cStringUsingEncoding:NSASCIIStringEncoding];
+        
+        sqlite3_stmt *compiledStatement;
+        if(sqlite3_prepare_v2(database, sqlStatement, -1, &compiledStatement, NULL) == SQLITE_OK) {
+            // Loop through the results and add them to the feeds array
+            while(sqlite3_step(compiledStatement) == SQLITE_ROW) {
+                
+                
+               
+                
+                item.firstName= [NSString stringWithUTF8String:(char *)sqlite3_column_text(compiledStatement,1)];
+                 item.lastName= [NSString stringWithUTF8String:(char *)sqlite3_column_text(compiledStatement,2)];
+                 item.emailId= [NSString stringWithUTF8String:(char *)sqlite3_column_text(compiledStatement,3)];
+                
+                
+            }
+            
+        }
+    }
+    
+    return item;
 
+}
 -(int)insertUserInfo:(UserInfoObject *)record {
     sqlite3 *database;
     int result;
@@ -89,7 +121,7 @@
     {
         
         
-        NSString *stmt=[NSString stringWithFormat:@"UPDATE UserData  SET FirstName=\"%@\",LastName=\"%@\",email=\"%@\" where id=%d",record.firstName,record.lastName,record.emailId,0];
+        NSString *stmt=[NSString stringWithFormat:@"UPDATE UserData  SET FirstName=\"%@\",LastName=\"%@\",email=\"%@\" where id=%d",record.firstName,record.lastName,record.emailId,2];
         
         
         
@@ -426,6 +458,77 @@
     return fetchUserInfo;
 }
 
+
+-(NSMutableArray *)fetchPhonenumber;
+{
+    sqlite3 *database;
+    NSMutableArray *datafetch2=[[NSMutableArray alloc]init];
+    
+    // Open the database from the users filessytem
+    if(sqlite3_open([[DatabaseAdapter getDBPath] UTF8String], &database) == SQLITE_OK) {
+        
+        NSString *stmt=[NSString stringWithFormat:@"select * from BranchData2"];
+        const char *sqlStatement = [stmt cStringUsingEncoding:NSASCIIStringEncoding];
+        
+        sqlite3_stmt *compiledStatement;
+        
+        if(sqlite3_prepare_v2(database, sqlStatement, -1, &compiledStatement, NULL) == SQLITE_OK) {
+            // Loop through the results and add them to the feeds array
+            while(sqlite3_step(compiledStatement) == SQLITE_ROW) {
+            BranchData2Object *item=[[BranchData2Object alloc]init];
+                
+                item.Id = [NSString stringWithUTF8String:(char *)sqlite3_column_text(compiledStatement,0)];
+                
+                item.BranchId= [NSString stringWithUTF8String:(char *)sqlite3_column_text(compiledStatement,1)];
+                
+                item.PhoneNo= [NSString stringWithUTF8String:(char *)sqlite3_column_text(compiledStatement,2)];
+                
+                [datafetch2 addObject:item];
+            }
+        }
+    }
+    return datafetch2;
+    
+}
+
+
+-(int)updatePropertyDetails:(PropertyDetailsObject *) record{
+    BOOL success = false;
+    
+    sqlite3_stmt *statement = NULL;
+    sqlite3 *database;
+    
+    
+    if(sqlite3_open([[DatabaseAdapter getDBPath] UTF8String], &database) == SQLITE_OK)
+        
+    {
+        
+        
+        NSString *stmt=[NSString stringWithFormat:@"UPDATE Properties  SET Nickname=\"%@\",AddressOne=\"%@\",AddressTwo=\"%@\",City=\"%@\",State=\"%@\",PostalCode=\"%@\",LocationType=\"%@\",isDefault=\"%@\" where Id=%@",record.nickName,record.addressOne,record.addressTwo,record.city,record.state,record.postalCode,record.locationType,record.isDefault,record.Id];
+        
+        
+        
+        const char *update_stmt = [stmt UTF8String];
+        sqlite3_prepare_v2(database,update_stmt, -1, &statement, NULL );
+        
+        if (sqlite3_step(statement) == SQLITE_DONE)
+        {
+            success = true;
+            
+        }
+        
+        else{
+            NSLog(@"New data, Nothing to delete");
+            success = false;
+        }
+        
+        sqlite3_finalize(statement);
+        sqlite3_close(database);
+        
+    }
+    
+    return success;
+}
 
 /*
 
